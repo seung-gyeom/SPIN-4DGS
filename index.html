@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="SPIN-4DGS: Spatiotemporal Position Implicit Network for 4D Gaussian Splatting enabling faithful reconstruction under fast motions with large inter-frame displacements.">
+  <meta name="keywords" content="4D Gaussian Splatting, SPIN-4DGS, Dynamic Scene Reconstruction, Fast Motion">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Implicit 4D Gaussian Splatting for Fast Motion with Large Inter-Frame Displacements</title>
+  <link rel="icon" href="./static/images/favicon.svg" type="image/svg+xml">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+<link rel="stylesheet" href="./static/css/bulma.min.css">
+<link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+<link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+<link rel="stylesheet" href="./static/css/index.css">
+
+<!-- Slick carousel (CSS 먼저) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
+
+<!-- jQuery는 하나만 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Slick JS -->
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<!-- Other JS -->
+<script src="./static/js/fontawesome.all.min.js"></script>
+<script src="./static/js/bulma-slider.min.js"></script>
+
+<!-- Comparison JS -->
+<script src="./static/js/comparison.js"></script>
+
+<!-- 마지막에 index.js -->
+<script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://openreview.net/forum?id=MWtXs60n38">
+        <span class="icon"><i class="fas fa-book"></i></span>
+        <span>OpenReview</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Implicit 4D Gaussian Splatting for Fast Motion with Large Inter-Frame Displacements
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Seung-gyeom_Kim2">Seung-gyeom Kim</a>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Areum_Kim1">Areum Kim</a>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Yongjae_Yoo1">Yongjae Yoo</a>,</span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Sukmin_Yun1">Sukmin Yun</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">ICLR 2026</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://openreview.net/pdf?id=MWtXs60n38"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href="https://openreview.net/forum?id=MWtXs60n38"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-book"></i></span>
+                  <span>OpenReview</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code (Coming Soon)</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+
+
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./static/images/spin4dgs-teaser.jpg" alt="SPIN-4DGS Teaser" style="width: 100%; height: auto;" />
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">SPIN-4DGS</span> enables faithful 4D Gaussian splatting reconstruction under fast motions with large inter-frame displacements.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <!-- Abstract -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+            <!-- <div class="abstract-figure">
+      <img src="./static/images/spin4dgs-teaser.jpg" alt="SPIN-4DGS Teaser">
+    </div> -->
+          <p>
+            Recent 4D Gaussian Splatting (4DGS) methods often fail under fast motion with large inter-frame displacements, where Gaussian attributes are poorly learned during training, and fast-moving objects are often lost from the reconstruction. In this work, we introduce Spatiotemporal Position Implicit Network for 4DGS, coined SPIN-4DGS, which learns Gaussian attributes from explicitly collected spatiotemporal positions rather than modeling temporal displacements, thereby enabling more faithful splatting under fast motions with large inter-frame displacements. To avoid the heavy memory overhead of explicitly optimizing attributes across all spatiotemporal positions, we instead predict them with a lightweight feed-forward network trained under a rasterization-based reconstruction loss. Consequently, SPIN-4DGS learns shared representations across Gaussians, effectively capturing spatiotemporal consistency and enabling stable high-quality Gaussian splatting even under challenging motions. Across extensive experiments, SPIN-4DGS consistently achieves higher fidelity under large displacements, with clear improvements in PSNR and SSIM on challenging sports scenes from the CMU Panoptic dataset. For example, SPIN-4DGS notably outperforms the strongest baseline, D3DGS, by achieving +1.83 higher PSNR on the Basketball scene.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="section" id="observation">
+  <div class="container is-max-desktop">
+    <!-- Header -->
+    <div class="columns is-centered has-text-centered obs-header">
+      <div class="column is-four-fifths">
+        <h2 class="title is-4 obs-title">The Challenge in Fast Motion</h2>
+        <p class="subtitle is-5 obs-subtitle">
+          Existing 4DGS struggles under large inter-frame displacement.
+        </p>
+      </div>
+    </div>
+
+    <!-- Two failure cards -->
+    <div class="columns is-variable is-6" style="margin-top: 1rem;">
+      <!-- Card 1 -->
+      <div class="column is-half">
+        <div class="obs-card">
+          <div class="obs-card-header">
+            <div>
+              <p class="obs-card-title">Attribute Collapse</p>
+              <p class="obs-card-kicker">in Explicit 4DGS</p>
+            </div>
+          </div>
+
+          <div class="obs-media">
+            <img src="./static/images/attribute-collapse-explicit-4dgs.png" alt="Attribute Collapse in Explicit 4DGS">
+          </div>
+
+          <div class="obs-body">
+            <ul class="obs-bullets">
+              <li>Cross-frame interference<br>
+→ Attribute collapse over time</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="column is-half">
+        <div class="obs-card">
+          <div class="obs-card-header">
+            <div>
+              <p class="obs-card-title">Canonical Miss</p>
+              <p class="obs-card-kicker">in Deformable 4DGS</p>
+            </div>
+          </div>
+
+          <div class="obs-media">
+            <img src="./static/images/canonical-miss-deformable-4dgs.png" alt="Canonical Miss in Deformable 4DGS">
+          </div>
+
+          <div class="obs-body">
+            <ul class="obs-bullets">
+              <li>
+  Static canonical space fails for fast motion.<br>
+  → Object disappearance
+</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight callout -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="obs-callout">
+          <div class="obs-callout-title">Our Insight</div>
+          <p class="obs-callout-text">
+            
+            This motivates our core idea: <span class="obs-emph">decoupling position modeling from attribute learning</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="method">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+
+        <h2 class="title is-3">Method Overview</h2>
+
+        <div class="content has-text-centered">
+          <img src="./static/images/method-overview.jpg"
+               alt="Method Overview"
+               style="width: 100%; height: auto; max-width: 1200px; margin: 0 auto;" />
+        </div>
+
+        <div class="content has-text-justified" style="margin-top: 18px;">
+          <p>
+            <strong>Illustration of the overall framework.</strong> SPIN-4DGS consists of two stages of (a) Spatiotemporal Position Estimation and (b) Implicit Network for 4DGS. Specifically, (a) we slice Gaussians along the temporal axis to obtain spatiotemporal position sets and refine them with rasterization loss. Then, (b) the refined positions are normalized and passed through a 4D hash encoder and multibranch decoders to predict Gaussian attributes (scale, rotation, color, and opacity).
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="section" id="results">
+  <div class="container is-max-widescreen">
+
+    <!-- Title -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Experimental Results</h2>
+      </div>
+    </div>
+
+    
+ <div class="container is-max-desktop has-text-centered">
+
+  <h3 class="title is-4">Quantitative Results</h3>
+
+  <!-- ================= CMU ================= -->
+  <div style="margin-top: 30px;">
+    <img src="./static/images/quantitative-results-cmu-panoptic.png"
+     alt="CMU Panoptic Sports Results"
+     style="width: 100%; height: auto; margin-top: 10px;" />
+
+    <div class="content has-text-justified"
+         style="margin-top: 0px; font-size: 0.95rem; line-height: 1.6;">
+      <p>
+        <strong>CMU Panoptic Sports.</strong>
+        SPIN-4DGS achieves the best PSNR on all six scenes with an average of
+        <strong>30.11 dB</strong>, outperforming Realtime-4DGS (28.38 dB) by
+        <strong>+1.73 dB</strong> and D3DGS (28.70 dB) by <strong>+1.41 dB</strong>.
+        SSIM remains consistently high at <strong>0.93</strong>,
+        demonstrating strong robustness under extreme fast motion and
+        large inter-frame displacements.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= Neu3DV ================= -->
+  <div style="margin-top: 5px;">
+    <img src="./static/images/quantitative-results-neu3dv.png"
+     alt="Neu3DV Benchmark Results"
+     style="width: 100%; height: auto; margin-top: 20px;" />
+
+    <div class="content has-text-justified"
+         style="margin-top: 0px; font-size: 0.95rem; line-height: 1.6;">
+      <p>
+        <strong>Neu3DV Benchmark.</strong>
+        Using the default SPIN-4DGS training setup without refinement,
+        our method achieves the highest average PSNR of
+        <strong>32.19 dB</strong>, surpassing Realtime-4DGS (32.01 dB) by
+        <strong>+0.18 dB</strong> and clearly outperforming deformable baselines
+        such as Grid4D (31.49 dB) and 4DGaussian (31.01 dB).
+        SSIM remains consistently high at <strong>0.95</strong>,
+        confirming stable and sharp reconstructions even in complex scenes.
+      </p>
+    </div>
+  </div>
+
+<!-- ================= MeetRoom ================= -->
+<div style="margin-top: 5px;">
+  <img src="./static/images/quantitative-results-meetroom.png"
+       alt="MeetRoom Benchmark Results"
+       style="width: 85%; height: auto; margin-top: 20px;" />
+
+  <div class="content has-text-justified"
+       style="margin-top: 0px; font-size: 0.95rem; line-height: 1.6;">
+    <p>
+      <strong>MeetRoom Benchmark.</strong>
+      Evaluated on three indoor scenes (Discussion, Trimming, VR Headset),
+      SPIN-4DGS consistently achieves the highest PSNR across all baselines.
+      It outperforms the strongest explicit method Realtime-4DGS (30.47 dB)
+      by an average margin of <strong>+1.6 dB</strong>.
+      These results demonstrate strong robustness in cluttered indoor environments
+      with relatively small motions.
+    </p>
+  </div>
+</div>
+</div>
+
+</div>
+    <div class="columns is-centered has-text-centered" style="margin-top: 80px;">
+      <div class="column is-full-width">
+        <h2 class="title is-4">Visual Comparisons</h2>
+        
+        <div class="content has-text-justified" style="max-width: 900px; margin: 0 auto 30px auto;">
+          <p>
+            Visual comparisons between our <span class="dnerf">SPIN-4DGS</span> method and baseline approaches on challenging scenes.
+            Hover over or drag the slider to compare reconstructions.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-bottom: 16px;">Basketball</h3>
+        <div class="comparison-grid" style="margin-bottom: 36px;">
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">Realtime-4DGS</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/basketball/Realtime-4DGS.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/basketball/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">4DGaussians</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/basketball/4DGaussians.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/basketball/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">D3DGS</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/basketball/D3DGS.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/basketball/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="title is-4" style="margin-bottom: 16px;">Tennis</h3>
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">Realtime-4DGS</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/tennis/Realtime-4DGS.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/tennis/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">4DGaussians</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/tennis/4DGaussians.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/tennis/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">D3DGS</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/tennis/D3DGS.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/tennis/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="title is-4" style="margin-bottom: 16px; margin-top: 22px;">Softball</h3>
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">Realtime-4DGS</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/softball/Realtime-4DGS.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/softball/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">4DGaussians</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/softball/4DGaussians.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/softball/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-item">
+            <div class="comparison-container">
+              <div class="method-label method-label-left">Ours</div>
+              <div class="method-label method-label-right">D3DGS</div>
+              <div class="comparison-image baseline-image">
+                <video class="comparison-video baseline-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/softball/D3DGS.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-image ours-image">
+                <video class="comparison-video ours-video" muted playsinline webkit-playsinline loop preload="metadata" autoplay>
+                  <source src="./static/videos/CMU/softball/Ours.mp4" type="video/mp4">
+                </video>
+              </div>
+              <div class="comparison-slider">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================= -->
+<!-- Spatiotemporal Slicing    -->
+<!-- ========================= -->
+<section class="section" id="slicing-ablation">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+
+        <h2 class="title is-3">Effect of Spatiotemporal Position Slicing</h2>
+
+        <div class="content has-text-justified" style="max-width: 900px; margin: 0 auto 18px auto;">
+          <p>
+            Without slicing, Gaussians are optimized jointly across time, causing cross-frame interference and blurred fast-motion reconstructions.
+            Our spatiotemporal slicing decouples Gaussians per frame, improving fidelity while reducing training cost.
+          </p>
+        </div>
+
+        <!-- ✅ Figure (single image) -->
+        <figure class="image slicing-figure">
+          <img src="./static/images/spatiotemporal-slicing-ablation.png" alt="Qualitative comparison of spatiotemporal slicing">
+          <figcaption class="has-text-centered slicing-caption">
+            Qualitative comparison of spatiotemporal slicing. Without slicing, Gaussians interfere across frames, causing blur and artifacts.
+            Our slicing decouples Gaussians per time step, yielding sharper and temporally consistent reconstructions.
+          </figcaption>
+        </figure>
+
+        <!-- ✅ Table -->
+        <div class="table-wrap">
+          <table class="table is-bordered is-striped is-narrow is-hoverable ablation-table">
+            <thead>
+              <tr>
+                <th>Slicing</th>
+                <th>PSNR ↑</th>
+                <th>SSIM ↑</th>
+                <th>Train Time ↓</th>
+                <th>Train Memory ↓</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>✗</td>
+                <td>27.48</td>
+                <td>0.89</td>
+                <td>1h 20m</td>
+                <td>18GB</td>
+              </tr>
+              <tr>
+                <td><b>✓</b></td>
+                <td><b>28.96</b></td>
+                <td><b>0.92</b></td>
+                <td><b>25m</b></td>
+                <td><b>9GB</b></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="table-caption">
+            Evaluated on Football sequence (batch size fixed to 1). Slicing improves fidelity and reduces training cost.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{kim2026spin4dgs,
+  author    = {Seung-gyeom Kim and Areum Kim and Yongjae Yoo and Sukmin Yun},
+  title     = {Implicit 4D Gaussian Splatting for Fast Motion with Large Inter-Frame Displacements},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+}
+</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://openreview.net/pdf?id=MWtXs60n38">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="#">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+              href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the
+            <a href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Optional: Fix nav overlap if it happens -->
+<style>
+  #results-carousel .carousel-nav-left { left: 10px !important; }
+  #results-carousel .carousel-nav-right { right: 10px !important; }
+</style>
+
+</body>
+</html>

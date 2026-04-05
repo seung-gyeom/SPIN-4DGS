@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/
+
+*.log
+
+# Large media files (keep local)
+static/videos/*.mp4
