@@ -1,53 +1,13 @@
-window.HELP_IMPROVE_VIDEOJS = false;
+document.addEventListener("DOMContentLoaded", function () {
+  var navbarBurger = document.querySelector(".navbar-burger");
+  var navbarMenu = document.querySelector(".navbar-menu");
 
-var INTERP_BASE = "./static/interpolation/stacked";
-var NUM_INTERP_FRAMES = 240;
-
-var interp_images = [];
-function preloadInterpolationImages() {
-  for (var i = 0; i < NUM_INTERP_FRAMES; i++) {
-    var path = INTERP_BASE + "/" + String(i).padStart(6, "0") + ".jpg";
-    interp_images[i] = new Image();
-    interp_images[i].src = path;
+  if (navbarBurger && navbarMenu) {
+    navbarBurger.addEventListener("click", function () {
+      navbarBurger.classList.toggle("is-active");
+      navbarMenu.classList.toggle("is-active");
+    });
   }
-}
 
-function setInterpolationImage(i) {
-  var image = interp_images[i];
-  image.ondragstart = function () { return false; };
-  image.oncontextmenu = function () { return false; };
-  $("#interpolation-image-wrapper").empty().append(image);
-}
-
-$(document).ready(function () {
-  // navbar burger
-  $(".navbar-burger").click(function () {
-    $(".navbar-burger").toggleClass("is-active");
-    $(".navbar-menu").toggleClass("is-active");
-  });
-
-  // ✅ qualitative carousel (ONLY THIS)
-$('#results-carousel').slick({
-  arrows: true,
-  dots: true,
-  infinite: true,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  adaptiveHeight: true
-});
-
-  // ===== Visual Comparisons =====
   initializeComparisons();
-
-  // interpolation slider (너 기존)
-  preloadInterpolationImages();
-  $("#interpolation-slider").on("input", function () {
-    setInterpolationImage(this.value);
-  });
-  setInterpolationImage(0);
-  $("#interpolation-slider").prop("max", NUM_INTERP_FRAMES - 1);
-
-  if (typeof bulmaSlider !== "undefined") {
-    bulmaSlider.attach();
-  }
 });
