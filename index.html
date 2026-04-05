@@ -453,6 +453,81 @@
 </section>
 
 
+<!-- ========================= -->
+<!-- Position Refinement       -->
+<!-- ========================= -->
+<section class="section page-section" id="refinement-ablation">
+  <div class="container is-max-desktop">
+    <div class="section-shell">
+      <div class="columns is-centered has-text-centered section-header">
+        <div class="column is-full-width">
+          <p class="section-kicker">Ablation</p>
+          <h2 class="title is-3 section-title">Effect of Spatiotemporal Position Refinement</h2>
+          <p class="section-intro refinement-intro">
+            The videos below visualize the refinement ablation in Table 2. Even with a small refinement budget, SPIN-4DGS already preserves stable object structures, while additional iterations mainly sharpen fine details.
+          </p>
+        </div>
+      </div>
+
+      <div class="refinement-video-grid">
+        <article class="refinement-card">
+          <div class="refinement-card-header">
+            <p class="refinement-card-kicker">Refinement Iterations</p>
+            <h3 class="title is-5 refinement-card-title">0.5K Iterations</h3>
+          </div>
+          <div class="refinement-video-frame">
+            <video class="refinement-video" autoplay muted loop playsinline preload="metadata">
+              <source src="./static/videos/refinment/video_rgb_0.5.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="refinement-card-body">
+            Stable object structures are already recovered without collapse, showing that SPIN-4DGS remains effective even under a minimal refinement budget.
+          </div>
+        </article>
+
+        <article class="refinement-card">
+          <div class="refinement-card-header">
+            <p class="refinement-card-kicker">Refinement Iterations</p>
+            <h3 class="title is-5 refinement-card-title">1K Iterations</h3>
+          </div>
+          <div class="refinement-video-frame">
+            <video class="refinement-video" autoplay muted loop playsinline preload="metadata">
+              <source src="./static/videos/refinment/video_rgb_1k.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="refinement-card-body">
+            Additional refinement improves local geometry and appearance, making fine structures such as ball edges and racket nets more consistent.
+          </div>
+        </article>
+
+        <article class="refinement-card">
+          <div class="refinement-card-header">
+            <p class="refinement-card-kicker">Refinement Iterations</p>
+            <h3 class="title is-5 refinement-card-title">2K Iterations</h3>
+          </div>
+          <div class="refinement-video-frame">
+            <video class="refinement-video" autoplay muted loop playsinline preload="metadata">
+              <source src="./static/videos/refinment/video_rgb_2k.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="refinement-card-body">
+            More iterations further sharpen fine details, especially around motion-sensitive regions, while preserving the same stable overall structure.
+          </div>
+        </article>
+      </div>
+
+      <div class="content has-text-justified refinement-summary">
+        <p>
+          <strong>Qualitative results on spatiotemporal position refinement.</strong>
+          Figure 6 and the videos above show that SPIN-4DGS already captures stable object structures with only <strong>0.5K</strong> refinement iterations.
+          Increasing the budget to <strong>1K</strong> and <strong>2K</strong> mainly improves fine details such as ball edges and racket nets.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section class="section page-section" id="BibTeX">
   <div class="container is-max-desktop">
     <div class="section-shell section-shell-compact bibtex-shell content">

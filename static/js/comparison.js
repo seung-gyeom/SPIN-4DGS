@@ -11,7 +11,7 @@ var COMPARISON_SHOWCASE = [
         oursSrc: "./static/videos/CMU/basketball/Ours.mp4"
       },
       {
-        baseline: "4DGaussians",
+        baseline: "4DGaussian",
         baselineSrc: "./static/videos/CMU/basketball/4DGaussians.mp4",
         oursSrc: "./static/videos/CMU/basketball/Ours.mp4"
       },
@@ -34,7 +34,7 @@ var COMPARISON_SHOWCASE = [
         oursSrc: "./static/videos/CMU/tennis/Ours.mp4"
       },
       {
-        baseline: "4DGaussians",
+        baseline: "4DGaussian",
         baselineSrc: "./static/videos/CMU/tennis/4DGaussians.mp4",
         oursSrc: "./static/videos/CMU/tennis/Ours.mp4"
       },
@@ -57,7 +57,7 @@ var COMPARISON_SHOWCASE = [
         oursSrc: "./static/videos/CMU/softball/Ours.mp4"
       },
       {
-        baseline: "4DGaussians",
+        baseline: "4DGaussian",
         baselineSrc: "./static/videos/CMU/softball/4DGaussians.mp4",
         oursSrc: "./static/videos/CMU/softball/Ours.mp4"
       },
